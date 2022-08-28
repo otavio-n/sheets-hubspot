@@ -7,9 +7,8 @@ const Parse = require("./Use-cases/integrate-contact-use-case");
 
 async function execute() {
   const rows = await GoogleSheets();
-  const preparedContacts = await Parse(rows)
-  console.log({preparedContacts})
-  
+  const preparedContacts = await Parse(rows);
+  await Hubspot(preparedContacts);
 }
 
 execute();

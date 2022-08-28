@@ -2,19 +2,17 @@
 
 const hubspot = require("@hubspot/api-client");
 
-async function sendContactToHubspot() {
+async function execute(contacts) {
+  for (let contact of contacts) {
+    await sendContactToHubspot(contact);
+  }
+}
+
+async function sendContactToHubspot(properties) {
   const hubspotClient = new hubspot.Client({
     accessToken: process.env.HUBSPOT_ACCESS_TOKEN,
   });
 
-  const properties = {
-    company: "Biglytics",
-    email: "bcooper@biglytics.net",
-    firstname: "Sheldon",
-    lastname: "Cooper",
-    phone: "(877) 929-0687",
-    website: "biglytics.net",
-  };
   const SimplePublicObjectInput = { properties };
 
   try {
@@ -29,4 +27,4 @@ async function sendContactToHubspot() {
   }
 }
 
-module.exports = sendContactToHubspot
+module.exports = execute;
