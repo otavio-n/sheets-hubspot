@@ -1,11 +1,13 @@
 "use strict";
 
 require("dotenv").config();
-const GoogleSheets = require('./GoogleSheets')
-const Hubspot = require('./Hubspot')
+const GoogleSheets = require("./GoogleSheets");
+const Hubspot = require("./Hubspot");
+const Parse = require("./Use-cases/integrate-contact-use-case");
 
 async function execute() {
-  await GoogleSheets()
+  const rows = await GoogleSheets();
+  console.log({rows})
 }
 
-execute()
+execute();

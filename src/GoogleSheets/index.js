@@ -3,6 +3,13 @@
 const { google } = require("googleapis");
 
 async function execute() {
+  const rows = await getSheetRowsFromApi();
+  await verifyFirstRow(rows[0]);
+  rows.shift();
+  return rows;
+}
+
+async function getSheetRowsFromApi() {
   const auth = new google.auth.GoogleAuth({
     keyFile: "credentials.json",
     scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -21,6 +28,7 @@ async function execute() {
       range: "Página1",
     });
     console.log(JSON.stringify(getRows.data, null, 2));
+    return getRows.data.values;
   } catch (e) {
     e.message === "HTTP request failed"
       ? console.error(JSON.stringify(e.response, null, 2))
@@ -28,4 +36,21 @@ async function execute() {
   }
 }
 
-module.exports = execute
+async function verifyFirstRow(firstRowValues) {
+  const firstRow = [
+    "Nome da empresa",
+    "Nome completo",
+    "Email",
+    "Telefone",
+    "Website",
+  ];
+
+  if (
+    firstRow.length !== firstRowValues.length ||
+    !firstRow.every((element, index) => element === firstRowValues[index])
+  ) {
+    throw new Error("The first row is incorrect");
+  }
+}
+
+module.exports = execute;
