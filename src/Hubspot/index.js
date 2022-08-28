@@ -1,29 +1,6 @@
 "use strict";
 
-require("dotenv").config();
-const { google } = require("googleapis");
 const hubspot = require("@hubspot/api-client");
-
-async function execute() {
-  const auth = new google.auth.GoogleAuth({
-    keyFile: "credentials.json",
-    scopes: "https://www.googleapis.com/auth/spreadsheets",
-  });
-
-  const client = await auth.getClient();
-
-  const googleSheets = google.sheets({ version: "v4", auth: client });
-
-  const spreadsheetId = process.env.GOOGLE_SHEET_ID;
-
-  const getRows = await googleSheets.spreadsheets.values.get({
-    auth,
-    spreadsheetId,
-    range: "Página1",
-  });
-
-  console.log(getRows.data);
-}
 
 async function sendContactToHubspot() {
   const hubspotClient = new hubspot.Client({
@@ -52,5 +29,4 @@ async function sendContactToHubspot() {
   }
 }
 
-execute()
-sendContactToHubspot()
+module.exports = sendContactToHubspot
